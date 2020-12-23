@@ -36,14 +36,18 @@ jobs:
         cd src
         ./release_linux.sh
         
-    - name: Upload firmware to cowtransfer
-      id: cowtransfer
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Upload
       run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
+        pip install -r requirements.txt
+        python upload.py
+      env: 
+        filename: 'linux.zip'
+        nutstore_url: ${{ secrets.NUTSTORE_URL }}
+        nutstore_username: ${{ secrets.NUTSTORE_USERNAME }}
+        nutstore_password: ${{ secrets.NUTSTORE_PASSWORD }}
     
 
   build_windows:

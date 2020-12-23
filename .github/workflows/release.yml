@@ -3,11 +3,11 @@ name: Release
 on:
   workflow_dispatch:
   repository_dispatch:
-      inputs:
-      ssh:
-        description: 'SSH connection to Actions'
-        required: true
-        default: 'true'
+    inputs:
+    ssh:
+      description: 'SSH connection to Actions'
+      required: true
+      default: 'true'
 
 jobs:
   build_linux:
@@ -64,5 +64,18 @@ jobs:
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
         cd src
         release_win.bat
+        
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Upload
+      run: |
+        pip install -r requirements.txt
+        python upload.py
+      env: 
+        filename: 'windows.zip'
+        nutstore_url: ${{ secrets.NUTSTORE_URL }}
+        nutstore_username: ${{ secrets.NUTSTORE_USERNAME }}
+        nutstore_password: ${{ secrets.NUTSTORE_PASSWORD }}
     
 

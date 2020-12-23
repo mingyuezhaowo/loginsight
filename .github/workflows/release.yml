@@ -31,42 +31,6 @@ jobs:
         cd src
         ./release_linux.sh
     
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-    - name: Upload
-      run: |
-        pip install -r requirements.txt
-        python upload.py
-      env: 
-        filename: 'linux.zip'
-        nutstore_url: ${{ secrets.NUTSTORE_URL }}
-        nutstore_username: ${{ secrets.NUTSTORE_USERNAME }}
-        nutstore_password: ${{ secrets.NUTSTORE_PASSWORD }}
-
-  build_mac:
-    runs-on: macos-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2.10.0
-
-    - name: do build
-      run: cd src;./release_macos.sh
-    
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-    - name: Upload
-      run: |
-        pip install -r requirements.txt
-        python upload.py
-      env: 
-        filename: 'macos.zip'
-        nutstore_url: ${{ secrets.NUTSTORE_URL }}
-        nutstore_username: ${{ secrets.NUTSTORE_USERNAME }}
-        nutstore_password: ${{ secrets.NUTSTORE_PASSWORD }}
 
   build_windows:
     runs-on: windows-latest
@@ -83,15 +47,4 @@ jobs:
         cd src
         release_win.bat
     
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-    - name: Upload
-      run: |
-        pip install -r requirements.txt
-        python upload.py
-      env: 
-        filename: 'windows.zip'
-        nutstore_url: ${{ secrets.NUTSTORE_URL }}
-        nutstore_username: ${{ secrets.NUTSTORE_USERNAME }}
-        nutstore_password: ${{ secrets.NUTSTORE_PASSWORD }}
+
